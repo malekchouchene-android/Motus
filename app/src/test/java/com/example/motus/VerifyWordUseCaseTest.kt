@@ -78,4 +78,20 @@ class VerifyWordUseCaseTest {
             )
         )
     }
+
+    @Test
+    fun should_detekt_multiple_occurence_of_letter() {
+        val verifyWordUseCase = VerifyWordUseCase()
+        val result = verifyWordUseCase.execute("GEEEEE", "GERCAS")
+        Truth.assertThat(result.getOrThrow()).isEqualTo(
+            listOf(
+                LetterVerificationResult.CORRECT,
+                LetterVerificationResult.CORRECT,
+                LetterVerificationResult.INCORRECT,
+                LetterVerificationResult.INCORRECT,
+                LetterVerificationResult.INCORRECT,
+                LetterVerificationResult.INCORRECT
+            )
+        )
+    }
 }

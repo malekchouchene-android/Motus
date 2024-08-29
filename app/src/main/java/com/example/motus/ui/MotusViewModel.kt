@@ -77,8 +77,8 @@ class MotusViewModel @Inject constructor(
             verifyWordUseCase.execute(word, wordToGuess)
                 .onSuccess { verificationResult ->
                     val lastAttempts = _state.value.attempts.toMutableList()
-                    lastAttempts.add(word.map {
-                        LetterAttempts(it.toString(), verificationResult[word.indexOf(it)])
+                    lastAttempts.add(word.mapIndexed { index, char ->
+                        LetterAttempts(char.toString(), verificationResult[index])
                     })
                     val newAttempts = lastAttempts.toList()
                     _state.update { lastState ->

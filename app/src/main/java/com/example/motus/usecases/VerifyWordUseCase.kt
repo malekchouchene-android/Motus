@@ -14,17 +14,17 @@ class VerifyWordUseCase @Inject constructor() {
             return Result.success(List(WORD_LENGTH) { LetterVerificationResult.CORRECT })
         }
         val result = mutableListOf<LetterVerificationResult>()
-        val wordToGuessChars = correctWord.toCharArray()
         val wordChars = input.toCharArray()
-        for (index in 0..WORD_LENGTH) {
+        for (index in 0 until WORD_LENGTH) {
             if (wordChars[index] == correctWord[index]) {
                 result.add(LetterVerificationResult.CORRECT)
-            } else if (!wordToGuessChars.contains(wordChars[index])) {
-                result.add(LetterVerificationResult.MISPLACED)
-            } else {
+            } else if (!correctWord.contains(wordChars[index])) {
                 result.add(LetterVerificationResult.INCORRECT)
+            } else {
+                result.add(LetterVerificationResult.MISPLACED)
             }
         }
+
         return Result.success(result)
 
     }
