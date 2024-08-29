@@ -15,19 +15,37 @@ class VerifyWordUseCase @Inject constructor() {
         }
         val result = mutableListOf<LetterVerificationResult>()
         val wordChars = input.toCharArray()
+        // Count the number of each letter in the word to guess
+        val countLetter: MutableMap<Char, Int> = mutableMapOf()
+        for (correctChar in correctWord.toCharArray().distinct()) {
+            countLetter[correctChar] = correctWord.count { it == correctChar }
+        }
+        val checkedLetter: MutableMap<Char, Int> = mutableMap()
         for (index in 0 until WORD_LENGTH) {
             if (wordChars[index] == correctWord[index]) {
                 result.add(LetterVerificationResult.CORRECT)
+                checkedLetter[wordChars[index]] =
+                    checkedLetter.getOrDefault(wordChars[index], 0) + 1
             } else if (!correctWord.contains(wordChars[index])) {
                 result.add(LetterVerificationResult.INCORRECT)
             } else {
-                result.add(LetterVerificationResult.MISPLACED)
+                if (checkedLetter.getOrDefault(wordChars[index], 0) < countLetter.getOrDefault(
+                        wordChars[index],
+                        0
+                    )
+                ) {
+                    result.add(LetterVerificationResult.MISPLACED)
+                } else {
+                    result.add(LetterVerificationResult.INCORRECT)
+                }
             }
         }
 
         return Result.success(result)
 
     }
+
+    private fun mutableMap(): MutableMap<Char, Int> = mutableMapOf()
 }
 
 

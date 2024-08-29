@@ -70,7 +70,8 @@ dependencies {
     implementation(libs.timber)
     kapt(libs.hilt.compiler)
     implementation(libs.logging.interceptor)
-
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk)
     testImplementation(libs.junit)
     testImplementation(libs.truth)
     androidTestImplementation(libs.androidx.junit)

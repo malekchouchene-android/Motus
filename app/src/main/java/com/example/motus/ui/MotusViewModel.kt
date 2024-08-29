@@ -3,17 +3,15 @@ package com.example.motus.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.motus.BackgroundDispatcher
-import com.example.motus.usecases.GetRandomWord
+import com.example.motus.usecases.GetRandomWordUseCase
 import com.example.motus.usecases.LetterVerificationResult
 import com.example.motus.usecases.MAX_ATTEMPTS
 import com.example.motus.usecases.VerifyWordUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -21,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MotusViewModel @Inject constructor(
-    private val getRandomWord: GetRandomWord,
+    private val getRandomWord: GetRandomWordUseCase,
     private val verifyWordUseCase: VerifyWordUseCase,
     @BackgroundDispatcher private val backgroundDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
@@ -66,7 +64,7 @@ class MotusViewModel @Inject constructor(
     }
 
     fun submitAttempt(word: String) {
-        if (_state.value.win || _state.value.gameEnd || _state.value.win) return
+        if (_state.value.win || _state.value.lose || _state.value.win) return
         viewModelScope.launch(backgroundDispatcher) {
             val wordToGuess = _state.value.wordToGuess ?: return@launch
             _state.update {
@@ -87,7 +85,7 @@ class MotusViewModel @Inject constructor(
                             error = null,
                             attempts = newAttempts,
                             win = verificationResult.all { it == LetterVerificationResult.CORRECT },
-                            gameEnd = newAttempts.size == MAX_ATTEMPTS
+                            lose = newAttempts.size == MAX_ATTEMPTS
                         )
                     }
                 }.onFailure { error ->
@@ -105,13 +103,15 @@ class MotusViewModel @Inject constructor(
 
 data class MotusState(
     val wordToGuess: String? = null,
+    // List<LetterAttempts> represent a row of the game
     val attempts: List<List<LetterAttempts>> = emptyList(),
+    // hint is Just the First letter of the word to guess and . in each box
     val hint: List<LetterAttempts>? = null,
     val isLoading: Boolean = true,
     val win: Boolean = false,
-    val gameEnd: Boolean = false,
+    val lose: Boolean = false,
     val error: Throwable? = null,
-    val submitEnabled: Boolean = false,
 )
 
+// Represents a box with a letter and the result of the verification
 data class LetterAttempts(val letter: String, val result: LetterVerificationResult)
