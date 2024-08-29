@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Motus</string>
+    <string name="end_game_description_dialog">Vous avez perdu !</string>
+    <string name="end_game_title_dialog">Perdu !</string>
+    <string name="restart_game">Rejouer</string>
+    <string name="win_title_dialog">Bravo !</string>
+    <string name="win_description_dialog">Vous avez gagné !</string>
+    <string name="number_of_try">Easais %1$s/%2$s</string>
+</resources>
