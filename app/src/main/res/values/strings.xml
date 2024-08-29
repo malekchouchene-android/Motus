@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Motus</string>
-    <string name="end_game_description_dialog">Vous avez perdu !</string>
+    <string name="end_game_description_dialog">Vous avez perdu ! le mot à trouver est %s</string>
     <string name="end_game_title_dialog">Perdu !</string>
     <string name="restart_game">Rejouer</string>
     <string name="win_title_dialog">Bravo !</string>

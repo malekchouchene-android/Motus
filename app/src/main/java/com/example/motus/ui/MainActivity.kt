@@ -84,7 +84,14 @@ class MainActivity : ComponentActivity() {
                             }
                         },
                         title = { Text(stringResource(R.string.end_game_title_dialog)) },
-                        text = { Text(text = stringResource(R.string.end_game_description_dialog)) })
+                        text = {
+                            Text(
+                                text = stringResource(
+                                    R.string.end_game_description_dialog,
+                                    state.wordToGuess ?: ""
+                                )
+                            )
+                        })
                 }
                 GameScreen(state = state,
                     restart = { viewModel.startANewGame() },
