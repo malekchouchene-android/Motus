@@ -80,7 +80,7 @@ class VerifyWordUseCaseTest {
     }
 
     @Test
-    fun should_detekt_multiple_occurence_of_letter() {
+    fun should_detect_multiple_occurence_of_letter() {
         val verifyWordUseCase = VerifyWordUseCase()
         val result = verifyWordUseCase.execute(wordInput = "NAPESA", wordToGuess = "NATURE")
         Truth.assertThat(result.getOrThrow()).isEqualTo(
@@ -91,6 +91,38 @@ class VerifyWordUseCaseTest {
                 LetterVerificationResult.MISPLACED,
                 LetterVerificationResult.INCORRECT,
                 LetterVerificationResult.INCORRECT
+            )
+        )
+    }
+
+    @Test
+    fun should_detect_multiple_occurence_of_letter_2() {
+        val verifyWordUseCase = VerifyWordUseCase()
+        val result = verifyWordUseCase.execute(wordInput = "SURALA", wordToGuess = "SURLIA")
+        Truth.assertThat(result.getOrThrow()).isEqualTo(
+            listOf(
+                LetterVerificationResult.CORRECT,
+                LetterVerificationResult.CORRECT,
+                LetterVerificationResult.CORRECT,
+                LetterVerificationResult.INCORRECT,
+                LetterVerificationResult.MISPLACED,
+                LetterVerificationResult.CORRECT
+            )
+        )
+    }
+
+    @Test
+    fun should_detect_multiple_occurence_of_letter_3() {
+        val verifyWordUseCase = VerifyWordUseCase()
+        val result = verifyWordUseCase.execute(wordInput = "COOOOS", wordToGuess = "COCONS")
+        Truth.assertThat(result.getOrThrow()).isEqualTo(
+            listOf(
+                LetterVerificationResult.CORRECT,
+                LetterVerificationResult.CORRECT,
+                LetterVerificationResult.INCORRECT,
+                LetterVerificationResult.CORRECT,
+                LetterVerificationResult.INCORRECT,
+                LetterVerificationResult.CORRECT
             )
         )
     }

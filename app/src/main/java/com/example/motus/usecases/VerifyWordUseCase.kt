@@ -13,39 +13,45 @@ class VerifyWordUseCase @Inject constructor() {
         if (input == correctWord) {
             return Result.success(List(WORD_LENGTH) { LetterVerificationResult.CORRECT })
         }
-        val result = mutableListOf<LetterVerificationResult>()
-        val wordChars = input.toCharArray()
+        val result = Array(WORD_LENGTH) { LetterVerificationResult.INCORRECT }
+        val challengeChars = input.toCharArray()
         // Count the number of each letter in the word to guess
         val countLetter: MutableMap<Char, Int> = mutableMapOf()
         for (correctChar in correctWord.toCharArray().distinct()) {
             countLetter[correctChar] = correctWord.count { it == correctChar }
         }
-        val checkedLetter: MutableMap<Char, Int> = mutableMap()
+        val checkedLetter: MutableMap<Char, Int> = mutableMapOf()
+        // Identify correct char ,
+        for (i in 0 until WORD_LENGTH) {
+            if (challengeChars[i] == correctWord[i]) {
+                result[i] = LetterVerificationResult.CORRECT
+                checkedLetter[challengeChars[i]] =
+                    checkedLetter.getOrDefault(challengeChars[i], 0) + 1
+            }
+        }
+        // Identify misplaced char and Incorrect
         for (index in 0 until WORD_LENGTH) {
-            if (wordChars[index] == correctWord[index]) {
-                result.add(LetterVerificationResult.CORRECT)
-                checkedLetter[wordChars[index]] =
-                    checkedLetter.getOrDefault(wordChars[index], 0) + 1
-            } else if (!correctWord.contains(wordChars[index])) {
-                result.add(LetterVerificationResult.INCORRECT)
+            if (result[index] == LetterVerificationResult.CORRECT) {
+                continue
+            }
+            if (!correctWord.contains(challengeChars[index])) {
+                result[index] = LetterVerificationResult.INCORRECT
             } else {
-                if (checkedLetter.getOrDefault(wordChars[index], 0) < countLetter.getOrDefault(
-                        wordChars[index],
+                if (checkedLetter.getOrDefault(challengeChars[index], 0) < countLetter.getOrDefault(
+                        challengeChars[index],
                         0
                     )
                 ) {
-                    result.add(LetterVerificationResult.MISPLACED)
+                    result[index] = LetterVerificationResult.MISPLACED
                 } else {
-                    result.add(LetterVerificationResult.INCORRECT)
+                    result[index] = LetterVerificationResult.INCORRECT
                 }
             }
         }
 
-        return Result.success(result)
+        return Result.success(result.toList())
 
     }
-
-    private fun mutableMap(): MutableMap<Char, Int> = mutableMapOf()
 }
 
 
