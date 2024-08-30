@@ -43,6 +43,8 @@ class VerifyWordUseCase @Inject constructor() {
                     )
                 ) {
                     result[index] = LetterVerificationResult.MISPLACED
+                    checkedLetter[challengeChars[index]] =
+                        checkedLetter.getOrDefault(challengeChars[index], 0) + 1
                 } else {
                     result[index] = LetterVerificationResult.INCORRECT
                 }

@@ -126,4 +126,20 @@ class VerifyWordUseCaseTest {
             )
         )
     }
+
+    @Test
+    fun should_detect_multiple_occurence_of_letter_4() {
+        val verifyWordUseCase = VerifyWordUseCase()
+        val result = verifyWordUseCase.execute(wordInput = "BRIIII", wordToGuess = "BIHARI")
+        Truth.assertThat(result.getOrThrow()).isEqualTo(
+            listOf(
+                LetterVerificationResult.CORRECT,
+                LetterVerificationResult.MISPLACED,
+                LetterVerificationResult.MISPLACED,
+                LetterVerificationResult.INCORRECT,
+                LetterVerificationResult.INCORRECT,
+                LetterVerificationResult.CORRECT
+            )
+        )
+    }
 }
