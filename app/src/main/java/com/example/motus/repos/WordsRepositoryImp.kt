@@ -18,13 +18,16 @@ class WordsRepositoryImp @Inject constructor(
     @BackgroundDispatcher val backgroundDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) :
     WordsRepository {
+    private var wordList: List<String>? = null
     override suspend fun getListOfWords(): Result<List<String>> {
         return withContext(backgroundDispatcher) {
             runSuspendCatching {
-                wordApi.getListOfWords()
-                    .split("\n").map {
-                        it.trim()
-                    }
+                wordList ?: wordApi.getListOfWords()
+                        .split("\n").map {
+                            it.trim()
+                        }.apply {
+                            wordList = this
+                        }
             }.recoverCatching {
                 context.assets.open("words.txt").bufferedReader().readLines()
             }
