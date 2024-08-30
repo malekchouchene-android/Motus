@@ -36,6 +36,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -246,7 +247,7 @@ fun InputAttempt(
     onSubmitAttempt: (String) -> Unit,
     enabled: Boolean = true,
 ) {
-    var text by remember { mutableStateOf(firstLetter) }
+    var text by rememberSaveable { mutableStateOf(firstLetter) }
     Row(
         modifier
             .fillMaxWidth()
